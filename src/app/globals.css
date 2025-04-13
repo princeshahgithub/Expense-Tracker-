@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Improve touch targets on mobile */
+  button, a {
+    @apply min-h-[44px] min-w-[44px];
+    touch-action: manipulation;
+  }
+
+  /* Improve form elements on mobile */
+  input, select, textarea {
+    @apply min-h-[44px];
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+
+  /* Fix for iOS momentum scrolling */
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors
+    flex items-center justify-center text-center min-h-[44px];
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors
+    flex items-center justify-center text-center min-h-[44px];
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg 
+    focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+    text-gray-800 bg-white dark:bg-gray-800 dark:text-white
+    min-h-[44px];
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 sm:p-6;
+  }
+
+  /* Mobile-friendly grid layouts */
+  .grid-responsive {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6;
+  }
+
+  /* Mobile-friendly text sizes */
+  .text-responsive {
+    @apply text-sm sm:text-base;
+  }
+
+  /* Mobile-friendly headings */
+  .heading-responsive {
+    @apply text-xl sm:text-2xl font-bold;
+  }
+
+  /* Mobile-friendly padding */
+  .section-padding {
+    @apply p-4 sm:p-6;
+  }
+
+  /* Mobile-friendly margins */
+  .section-margin {
+    @apply my-4 sm:my-6;
+  }
+
+  /* Mobile-friendly container */
+  .container-responsive {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Mobile-first flexbox containers */
+  .flex-responsive {
+    @apply flex flex-col sm:flex-row;
+  }
+  
+  .flex-responsive-reverse {
+    @apply flex flex-col-reverse sm:flex-row;
+  }
+
+  /* Mobile-first spacing */
+  .stack-vertical {
+    @apply space-y-4 sm:space-y-6;
+  }
+  
+  .stack-horizontal {
+    @apply space-x-0 space-y-4 sm:space-y-0 sm:space-x-6 flex flex-col sm:flex-row;
+  }
+
+  /* Mobile-first button groups */
+  .button-group {
+    @apply flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2;
+  }
+
+  /* Scrollable container for mobile */
+  .scroll-container-x {
+    @apply overflow-x-auto whitespace-nowrap pb-4 -mx-4 px-4;
+    scrollbar-width: none; /* Firefox */
+  }
+  
+  .scroll-container-x::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+  }
+} 

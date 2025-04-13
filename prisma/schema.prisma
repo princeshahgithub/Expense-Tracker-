@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?   // Added for credentials auth
+  accounts      Account[]
+  sessions      Session[]
+  transactions  Transaction[]
+  categories    Category[]
+  budgets       Budget[]
+  goals         Goal[]
+  settings      UserSettings?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Transaction {
+  id          String    @id @default(cuid())
+  title       String
+  amount      Float
+  type        String    // "INCOME" or "EXPENSE"
+  date        DateTime
+  categoryId  String
+  userId      String
+  isRecurring Boolean   @default(false)
+  frequency   String?   // "DAILY", "WEEKLY", "MONTHLY", "YEARLY"
+  nextDueDate DateTime?
+  notes       String?
+  currency    String    @default("INR")
+  category    Category  @relation(fields: [categoryId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Category {
+  id           String        @id @default(cuid())
+  name         String
+  userId       String
+  type         String        // "INCOME" or "EXPENSE"
+  color        String?       // For UI representation
+  icon         String?       // Icon name for the category
+  transactions Transaction[]
+  budgets      Budget[]
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@unique([name, userId])
+}
+
+model Budget {
+  id         String   @id @default(cuid())
+  name       String
+  amount     Float
+  categoryId String
+  userId     String
+  period     String   // "MONTHLY", "YEARLY", "WEEKLY", "CUSTOM"
+  startDate  DateTime
+  endDate    DateTime?
+  notes      String?
+  category   Category @relation(fields: [categoryId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Goal {
+  id           String    @id @default(cuid())
+  name         String
+  targetAmount Float
+  currentAmount Float    @default(0)
+  targetDate   DateTime?
+  userId       String
+  description  String?
+  priority     String?   // "HIGH", "MEDIUM", "LOW"
+  status       String    @default("IN_PROGRESS") // "IN_PROGRESS", "COMPLETED", "ABANDONED"
+  category     String?   // e.g., "Savings", "Debt Repayment", "Investment", "Purchase", etc.
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model UserSettings {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  currency            String   @default("USD")
+  theme               String   @default("system")
+  dateFormat          String   @default("MM/DD/YYYY")
+  notificationsEnabled Boolean  @default(true)
+  emailNotifications   Boolean  @default(true)
+  budgetAlerts        Boolean  @default(true)
+  language            String   @default("en")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+} 
