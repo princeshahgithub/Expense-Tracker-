@@ -282,15 +282,8 @@ export default function HelpPage() {
                 Contact the developer: digantmalviya.23.cse@iite.indusuni.ac.in
               </span>
             </div>
-            <div className="flex items-center mt-2">
-              <FiMail className="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" />
-              <span className="text-gray-800 dark:text-gray-200 font-medium">
-                Contact the developer: premladani.23.it@iite.indusuni.ac.in
-              </span>
-            </div>
           </div>
         </div>
       </div>
-    </div>
   )
 } 
